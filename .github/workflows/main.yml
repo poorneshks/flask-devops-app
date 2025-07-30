@@ -14,7 +14,7 @@ env:
   AZURE_SUBSCRIPTION_ID: 3752d2f8-6ef2-4533-8ac8-3f4a0e631329
   AZURE_TENANT_ID: ce4136a6-8dad-47c5-9cdc-ddc03da55699
   RESOURCE_GROUP: devops-flask-rg
-  WEBAPP_NAME: flask-devops-app
+  WEBAPP_NAME: flask-webapp-poornesh472  # ✅ updated app name
 
 jobs:
   build-and-deploy:
