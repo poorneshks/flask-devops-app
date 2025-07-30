@@ -7,6 +7,10 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+@app.route("/")
+def home():
+    return "✅ Flask App deployed using GitHub Actions + OIDC!"
+
 @app.route("/health")
 def health():
     return "OK", 200

@@ -1,4 +1,4 @@
-name: Build and Deploy Flask App to Azure Web App
+name: Deploy Flask App to Azure Web App using OIDC
 
 on:
   push:
@@ -10,44 +10,40 @@ permissions:
   contents: read
 
 env:
-  AZURE_CLIENT_ID: fc4dd0f1-5a6a-4d23-8f8b-2a08438f5aa3
-  AZURE_SUBSCRIPTION_ID: 3752d2f8-6ef2-4533-8ac8-3f4a0e631329
-  AZURE_TENANT_ID: ce4136a6-8dad-47c5-9cdc-ddc03da55699
-  RESOURCE_GROUP: devops-flask-rg
-  WEBAPP_NAME: flask-webapp-poornesh472  # ✅ updated app name
+  AZURE_WEBAPP_NAME: flask-devops-app       # Replace with your Web App name
+  AZURE_RESOURCE_GROUP: flask-devops-rg     # Replace with your resource group name
+  AZURE_REGION: centralindia                # Replace with your App Service region
 
 jobs:
   build-and-deploy:
+    name: Build and Deploy Flask App
     runs-on: ubuntu-latest
     environment: PRODUCTION
 
     steps:
-      - name: 📥 Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 🧪 Set up Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: 🔧 Install dependencies
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 🛠️ Build (optional)
-        run: echo "Build step (if needed)"
-
-      - name: 🔐 Azure Login (OIDC)
+      - name: Azure Login using OIDC
         uses: azure/login@v2
         with:
-          client-id: ${{ env.AZURE_CLIENT_ID }}
-          tenant-id: ${{ env.AZURE_TENANT_ID }}
-          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: 🚀 Deploy to Azure Web App
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: ${{ env.WEBAPP_NAME }}
-          slot-name: production
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          slot-name: 'production'
           package: .
