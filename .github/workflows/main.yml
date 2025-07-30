@@ -1,4 +1,4 @@
-name: Deploy Flask App to Azure Web App using OIDC
+name: Flask Azure Deployment
 
 on:
   push:
@@ -10,15 +10,14 @@ permissions:
   contents: read
 
 env:
-  AZURE_WEBAPP_NAME: flask-devops-app       # Replace with your Web App name
-  AZURE_RESOURCE_GROUP: flask-devops-rg     # Replace with your resource group name
-  AZURE_REGION: centralindia                # Replace with your App Service region
+  AZURE_WEBAPP_NAME: flask-devops-app
+  AZURE_RESOURCE_GROUP: flask-devops-rg
+  AZURE_REGION: centralindia
 
 jobs:
   build-and-deploy:
-    name: Build and Deploy Flask App
     runs-on: ubuntu-latest
-    environment: PRODUCTION
+    environment: Production
 
     steps:
       - name: Checkout code
@@ -34,7 +33,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Azure Login using OIDC
+      - name: Run tests
+        run: |
+          echo "🧪 No tests configured. Skipping..."
+
+      - name: Login to Azure using OIDC
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -45,5 +48,4 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          slot-name: 'production'
           package: .
