@@ -1,4 +1,4 @@
-name: Build and Deploy Flask App to Azure
+name: Build and Deploy to Azure Web App
 
 on:
   push:
@@ -6,17 +6,16 @@ on:
       - main
 
 permissions:
-  id-token: write       # Required for OIDC
-  contents: read        # Required to checkout code
+  id-token: write
+  contents: read
 
 jobs:
   build-and-deploy:
-    name: Build and Deploy to Azure Web App
     runs-on: ubuntu-latest
-    environment: Production  # Case-sensitive! Must match Entra ID
+    environment: production  # This must match EXACTLY (case-sensitive) with your GitHub environment name
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -29,16 +28,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Azure Login using OIDC
-        uses: azure/login@v2
+      - name: Azure Login with OIDC
+        uses: azure/login@v1
         with:
           client-id: fc4dd0f1-5a6a-4d23-8f8b-2a08438f5aa3
-          tenant-id: 9e8b270d-a269-4e85-8929-daba5017ec79
-          subscription-id: c63e6fcf-6839-452f-bc65-ef771e04d78e
+          tenant-id: ce4136a6-8dad-47c5-9cdc-ddc03da55699
+          subscription-id: c63e6fcf-6839-452f-bc65-ef771e04d78e  # Update if changed
 
       - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@v2
         with:
-          app-name: flask-devops-app
-          slot-name: Production
+          app-name: flask-devops-app  # Replace with your actual web app name
           package: .
