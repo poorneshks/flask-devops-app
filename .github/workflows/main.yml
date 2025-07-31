@@ -10,7 +10,8 @@ permissions:
   contents: read
 
 env:
-  AZURE_WEBAPP_NAME: flask-devops-app
+  AZURE_WEBAPP_NAME: flask-webapp-poornesh472
+
   AZURE_RESOURCE_GROUP: flask-devops-rg
   AZURE_REGION: centralindia
 
